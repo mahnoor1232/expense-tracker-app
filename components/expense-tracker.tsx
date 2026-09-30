@@ -41,8 +41,8 @@ export function ExpenseTracker({ initialExpenses }: { initialExpenses: Expense[]
     startTransition(async () => { try { await deleteExpense(id) } catch { setItems(previous) } })
   }
 
-  return <main className="min-h-screen bg-[#f7f8f6] text-slate-900">
-    <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-6 sm:px-8 lg:px-12">
+  return <main className="expense-app min-h-screen bg-[#f4f1eb] text-[#26322b]">
+    <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-5 py-7 sm:px-8 lg:px-12">
       <header className="flex items-center justify-between border-b border-slate-200/80 pb-5">
         <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-2xl bg-slate-900 text-white"><ArrowDownLeft className="size-5" /></div><div><p className="text-sm font-semibold tracking-tight">Pocket</p><p className="text-xs text-slate-500">Personal finance</p></div></div>
         <div className="hidden items-center gap-2 text-xs text-slate-500 sm:flex"><span className="size-2 rounded-full bg-emerald-500" /> Synced just now</div>

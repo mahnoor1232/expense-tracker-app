@@ -159,5 +159,33 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: Arial, Helvetica, sans-serif;
   }
+}
+
+@layer components {
+  .expense-app {
+    background-image: radial-gradient(circle at 12% 8%, rgba(174, 190, 162, 0.22), transparent 26rem), radial-gradient(circle at 92% 74%, rgba(226, 193, 150, 0.16), transparent 24rem);
+  }
+
+  .expense-app h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    letter-spacing: -0.055em;
+  }
+
+  .expense-app input,
+  .expense-app select,
+  .expense-app button {
+    transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+  }
+
+  .expense-app form button[type='submit']:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(255, 255, 255, 0.12);
+  }
+}
+
+::selection {
+  background: #c7d5bf;
+  color: #26322b;
 }
