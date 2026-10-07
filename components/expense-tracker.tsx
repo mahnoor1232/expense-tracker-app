@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState, useTransition } from 'react'
-import { addExpense, deleteExpense } from '@/app/actions/expenses'
+import { addExpense, deleteExpense, updateBudget } from '@/app/actions/expenses'
 import Link from 'next/link'
 import { BarChart3, Car, ChevronDown, CreditCard, LayoutDashboard, MoreHorizontal, Plus, ShoppingBag, Sparkles, Trash2, Utensils, Wallet } from 'lucide-react'
 
@@ -14,8 +14,11 @@ const categoryColors = { Food: 'bg-amber-100 text-amber-700', Transport: 'bg-sky
 function formatMoney(value: number | string) { return `$${Number(value).toFixed(2)}` }
 function formatDate(value: Date) { return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(value)) }
 
-export function ExpenseTracker({ initialExpenses }: { initialExpenses: Expense[] }) {
+export function ExpenseTracker({ initialExpenses, initialBudget = 2000 }: { initialExpenses: Expense[]; initialBudget?: number }) {
   const [items, setItems] = useState(initialExpenses)
+  const [budget, setBudget] = useState(initialBudget)
+  const [budgetInput, setBudgetInput] = useState(String(initialBudget))
+  const [isSavingBudget, setIsSavingBudget] = useState(false)
   const [filter, setFilter] = useState('All expenses')
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
@@ -30,6 +33,7 @@ export function ExpenseTracker({ initialExpenses }: { initialExpenses: Expense[]
   const filteredItems = useMemo(() => filter === 'All expenses' ? periodItems : periodItems.filter((item) => item.category === filter), [filter, periodItems])
   const periodLabel = useMemo(() => new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${selectedPeriod}-01T00:00:00Z`)), [selectedPeriod])
   const total = periodItems.reduce((sum, item) => sum + Number(item.amount), 0)
+  const budgetUsed = budget > 0 ? Math.min(100, Math.round((total / budget) * 100)) : 0
   const average = periodItems.length ? total / periodItems.length : 0
   const topCategory = categories.map((name) => ({ name, amount: periodItems.filter((item) => item.category === name).reduce((sum, item) => sum + Number(item.amount), 0) })).sort((a, b) => b.amount - a.amount)[0]
 
@@ -41,13 +45,20 @@ export function ExpenseTracker({ initialExpenses }: { initialExpenses: Expense[]
     startTransition(async () => { try { await addExpense({ title: optimistic.title, amount: parsedAmount, category }) } catch { setItems((current) => current.filter((item) => item.id !== optimistic.id)) } })
   }
   function handleDelete(id: number) { const previous = items; setItems((current) => current.filter((item) => item.id !== id)); startTransition(async () => { try { await deleteExpense(id) } catch { setItems(previous) } }) }
+  async function handleBudgetSave(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const nextBudget = Number(budgetInput)
+    if (!Number.isFinite(nextBudget) || nextBudget <= 0) return
+    setIsSavingBudget(true)
+    try { await updateBudget(nextBudget); setBudget(nextBudget); setBudgetInput(String(nextBudget)) } finally { setIsSavingBudget(false) }
+  }
 
   return <main className="expense-app min-h-screen bg-[#f5f6f2] text-[#26322b]">
     <div className="mx-auto flex min-h-screen max-w-[1440px]">
       <aside className="hidden w-64 shrink-0 flex-col border-r border-[#dfe4dc] bg-[#fbfcf9] px-6 py-8 lg:flex">
         <div className="flex items-center gap-3"><div className="flex size-10 items-center justify-center rounded-xl bg-[#294438] text-white"><Wallet className="size-5" /></div><div><p className="font-semibold tracking-tight">Ledger</p><p className="text-[11px] text-slate-400">Personal finance</p></div></div>
         <nav className="mt-14 flex flex-col gap-2" aria-label="Main navigation"><p className="mb-3 px-3 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Workspace</p>{[['overview', LayoutDashboard, 'Overview'], ['expenses', CreditCard, 'Transactions'], ['insights', BarChart3, 'Insights']].map(([id, Icon, label]) => <button key={id as string} type="button" onClick={() => { setActiveSection(id as string); document.getElementById(id as string)?.scrollIntoView({ behavior: 'smooth' }) }} className={`flex items-center gap-3 rounded-xl px-3 py-3 text-left text-sm transition-colors ${activeSection === id ? 'bg-[#e9efe6] font-semibold text-[#294438]' : 'text-slate-500 hover:bg-slate-100'}`}><Icon className="size-4" /> {label as string}</button>)}</nav>
-        <button type="button" onClick={() => { setActiveSection('overview'); document.getElementById('overview')?.scrollIntoView({ behavior: 'smooth' }) }} className="mt-auto w-full rounded-2xl bg-[#eef3eb] p-4 text-left hover:bg-[#e4ede1]"><p className="text-xs font-semibold text-[#294438]">Monthly budget</p><p className="mt-2 text-2xl font-semibold">$2,000</p><div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white"><div className="h-full w-[36%] rounded-full bg-[#6f9879]" /></div><p className="mt-2 text-[11px] text-slate-500">36% used this month</p></button><button type="button" onClick={() => document.getElementById('add-expense')?.scrollIntoView({ behavior: 'smooth' })} className="mt-5 flex w-full items-center gap-3 border-t border-[#dfe4dc] pt-5 text-left text-xs text-slate-500 hover:text-[#294438]"><Plus className="size-4" /> Quick add expense</button>
+        <div className="mt-auto w-full rounded-2xl bg-[#eef3eb] p-4"><div className="flex items-center justify-between"><p className="text-xs font-semibold text-[#294438]">Monthly budget</p><span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Editable</span></div><form onSubmit={handleBudgetSave} className="mt-3 flex items-center gap-2"><label htmlFor="monthly-budget" className="sr-only">Monthly budget amount</label><div className="flex min-w-0 flex-1 items-center rounded-lg bg-white px-2.5"><span className="text-sm text-slate-400">$</span><input id="monthly-budget" type="number" min="1" step="0.01" value={budgetInput} onChange={(event) => setBudgetInput(event.target.value)} className="min-w-0 w-full bg-transparent px-1.5 py-2 text-lg font-semibold outline-none" /></div><button type="submit" disabled={isSavingBudget} className="rounded-lg bg-[#294438] px-3 py-2 text-xs font-semibold text-white hover:bg-[#355746] disabled:opacity-60">Save</button></form><div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white"><div className="h-full rounded-full bg-[#6f9879] transition-all" style={{ width: `${budgetUsed}%` }} /></div><p className="mt-2 text-[11px] text-slate-500">{budgetUsed}% used this month · {formatMoney(Math.max(0, budget - total))} left</p></div><button type="button" onClick={() => document.getElementById('add-expense')?.scrollIntoView({ behavior: 'smooth' })} className="mt-5 flex w-full items-center gap-3 border-t border-[#dfe4dc] pt-5 text-left text-xs text-slate-500 hover:text-[#294438]"><Plus className="size-4" /> Quick add expense</button>
       </aside>
       <div className="flex-1 px-5 py-6 sm:px-8 lg:px-12 lg:py-9">
         <header className="flex items-center justify-between"><div className="flex items-center gap-3 lg:hidden"><div className="flex size-9 items-center justify-center rounded-xl bg-[#294438] text-white"><Wallet className="size-4" /></div><span className="font-semibold">Ledger</span></div><div className="hidden lg:block"><p className="text-xs font-medium text-slate-400">Tuesday, September 30, 2026</p><p className="mt-1 text-sm font-semibold">Good morning, Alex</p></div><div className="flex items-center gap-4"><button type="button" onClick={() => document.getElementById('add-expense')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-xl bg-[#294438] px-3 py-2 text-xs font-semibold text-white hover:bg-[#355746] lg:hidden">Add expense</button><span className="hidden items-center gap-2 text-xs text-slate-500 sm:flex"><span className="size-2 rounded-full bg-emerald-500" /> Synced just now</span><Link href="/insights" className="hidden rounded-xl border border-[#dfe4dc] bg-white px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-[#eef3eb] sm:block">View insights</Link></div></header>
