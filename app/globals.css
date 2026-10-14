@@ -166,6 +166,51 @@
 @layer components {
   .expense-app {
     background-image: radial-gradient(circle at 12% 8%, rgba(174, 190, 162, 0.22), transparent 26rem), radial-gradient(circle at 92% 74%, rgba(226, 193, 150, 0.16), transparent 24rem);
+    animation: app-enter 700ms ease-out both;
+  }
+
+  .expense-app > div > aside,
+  .expense-app > div > div {
+    animation: content-rise 650ms ease-out both;
+  }
+
+  .expense-app > div > div > header {
+    animation: content-rise 700ms 80ms ease-out both;
+  }
+
+  .expense-app select {
+    color: #f3f7ee;
+    color-scheme: dark;
+  }
+
+  .expense-app select option {
+    background: #20372d;
+    color: #f3f7ee;
+  }
+
+  .expense-select:hover,
+  .expense-select:focus-visible {
+    border-color: rgba(185, 208, 181, 0.75);
+    box-shadow: 0 0 0 3px rgba(185, 208, 181, 0.16);
+  }
+
+  @keyframes app-enter {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes content-rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .expense-app,
+    .expense-app > div > aside,
+    .expense-app > div > div,
+    .expense-app > div > div > header {
+      animation: none;
+    }
   }
 
   .expense-app h1 {
