@@ -220,8 +220,12 @@
     .expense-app,
     .expense-app > div > aside,
     .expense-app > div > div,
-    .expense-app > div > div > header {
+    .expense-app > div > div > header,
+    .expense-app h1,
+    .expense-app h2,
+    .expense-app h3 {
       animation: none;
+      will-change: auto;
     }
   }
 
@@ -230,23 +234,29 @@
   .expense-app h3 {
     font-family: Georgia, 'Times New Roman', serif;
     letter-spacing: -0.055em;
-    background: linear-gradient(90deg, #294438 0%, #294438 50%, #6f9879 50%, #6f9879 100%);
-    background-size: 200% 100%;
+    background: linear-gradient(
+      110deg,
+      #294438 0%,
+      #294438 42%,
+      #6f9879 50%,
+      #294438 58%,
+      #294438 100%
+    );
+    background-size: 240% 100%;
+    background-position: 0% 50%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: gradient-flow 4s ease-in-out infinite;
+    animation: heading-shimmer 8s linear infinite;
+    will-change: background-position;
   }
 
-  @keyframes gradient-flow {
-    0% {
-      background-position: 0% 0%;
+  @keyframes heading-shimmer {
+    from {
+      background-position: 0% 50%;
     }
-    50% {
-      background-position: 100% 0%;
-    }
-    100% {
-      background-position: 0% 0%;
+    to {
+      background-position: 240% 50%;
     }
   }
 
