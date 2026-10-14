@@ -166,11 +166,98 @@
 @layer components {
   .expense-app {
     background-image: radial-gradient(circle at 12% 8%, rgba(174, 190, 162, 0.22), transparent 26rem), radial-gradient(circle at 92% 74%, rgba(226, 193, 150, 0.16), transparent 24rem);
+    animation: app-enter 700ms ease-out both;
   }
 
-  .expense-app h1 {
+  .expense-app > div > aside,
+  .expense-app > div > div {
+    animation: content-rise 650ms ease-out both;
+  }
+
+  .expense-app > div > div > header {
+    animation: content-rise 700ms 80ms ease-out both;
+  }
+
+  .expense-app select {
+    color: #26322b;
+    background-color: #ffffff;
+    color-scheme: light;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease, background-color 180ms ease;
+  }
+
+  .expense-app select[class*="bg-white/10"] {
+    background-color: #e9efe6 !important;
+    color: #26322b;
+  }
+
+  .expense-app select option {
+    background: #ffffff;
+    color: #26322b;
+  }
+
+  .expense-app select:hover,
+  .expense-app select:focus-visible {
+    border-color: #8aa88d;
+    box-shadow: 0 0 0 3px rgba(138, 168, 141, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .expense-app form {
+    animation: content-rise 600ms 140ms ease-out both;
+  }
+
+  @keyframes app-enter {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes content-rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .expense-app,
+    .expense-app > div > aside,
+    .expense-app > div > div,
+    .expense-app > div > div > header,
+    .expense-app h1,
+    .expense-app h2,
+    .expense-app h3 {
+      animation: none;
+      will-change: auto;
+    }
+  }
+
+  .expense-app h1,
+  .expense-app h2,
+  .expense-app h3 {
     font-family: Georgia, 'Times New Roman', serif;
     letter-spacing: -0.055em;
+    background: linear-gradient(
+      110deg,
+      #294438 0%,
+      #294438 42%,
+      #6f9879 50%,
+      #294438 58%,
+      #294438 100%
+    );
+    background-size: 240% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: heading-shimmer 8s linear infinite;
+    will-change: background-position;
+  }
+
+  @keyframes heading-shimmer {
+    from {
+      background-position: 0% 50%;
+    }
+    to {
+      background-position: 240% 50%;
+    }
   }
 
   .expense-app input,
