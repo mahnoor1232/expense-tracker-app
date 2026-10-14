@@ -182,7 +182,12 @@
     color: #26322b;
     background-color: #ffffff;
     color-scheme: light;
-    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease, background-color 180ms ease;
+  }
+
+  .expense-app select[class*="bg-white/10"] {
+    background-color: #e9efe6 !important;
+    color: #26322b;
   }
 
   .expense-app select option {
@@ -220,9 +225,29 @@
     }
   }
 
-  .expense-app h1 {
+  .expense-app h1,
+  .expense-app h2,
+  .expense-app h3 {
     font-family: Georgia, 'Times New Roman', serif;
     letter-spacing: -0.055em;
+    background: linear-gradient(90deg, #294438 0%, #294438 50%, #6f9879 50%, #6f9879 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-flow 4s ease-in-out infinite;
+  }
+
+  @keyframes gradient-flow {
+    0% {
+      background-position: 0% 0%;
+    }
+    50% {
+      background-position: 100% 0%;
+    }
+    100% {
+      background-position: 0% 0%;
+    }
   }
 
   .expense-app input,
