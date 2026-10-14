@@ -179,19 +179,26 @@
   }
 
   .expense-app select {
-    color: #f3f7ee;
-    color-scheme: dark;
+    color: #26322b;
+    background-color: #ffffff;
+    color-scheme: light;
+    transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
   }
 
   .expense-app select option {
-    background: #20372d;
-    color: #f3f7ee;
+    background: #ffffff;
+    color: #26322b;
   }
 
-  .expense-select:hover,
-  .expense-select:focus-visible {
-    border-color: rgba(185, 208, 181, 0.75);
-    box-shadow: 0 0 0 3px rgba(185, 208, 181, 0.16);
+  .expense-app select:hover,
+  .expense-app select:focus-visible {
+    border-color: #8aa88d;
+    box-shadow: 0 0 0 3px rgba(138, 168, 141, 0.2);
+    transform: translateY(-1px);
+  }
+
+  .expense-app form {
+    animation: content-rise 600ms 140ms ease-out both;
   }
 
   @keyframes app-enter {
