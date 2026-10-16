@@ -195,6 +195,20 @@
     color: #26322b;
   }
 
+  .expense-app .metric-card {
+    transition: transform 220ms ease, box-shadow 220ms ease, background-color 220ms ease, border-color 220ms ease;
+  }
+
+  .expense-app .metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 30px rgba(41, 68, 56, 0.14);
+  }
+
+  .expense-app .metric-card:not(.metric-card-dark):hover {
+    background-color: #eef4eb;
+    border-color: #b9d0b5;
+  }
+
   .expense-app select:hover,
   .expense-app select:focus-visible {
     border-color: #8aa88d;
