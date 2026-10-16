@@ -209,6 +209,10 @@
     border-color: #b9d0b5;
   }
 
+  .expense-app .metric-card-dark:hover {
+    background-color: #3a5f54;
+  }
+
   .expense-app select:hover,
   .expense-app select:focus-visible {
     border-color: #8aa88d;
