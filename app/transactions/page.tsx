@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function TransactionsPage() {
   const expenses = await getExpenses()
-  const total = expenses.reduce((sum, item) => sum + Number(item.amount), 0)
+  const total = expenses.filter((item) => item.transactionType !== 'income').reduce((sum, item) => sum + Number(item.amount), 0)
   return <main className="min-h-screen bg-[#f5f6f2] px-5 py-8 text-[#26322b] sm:px-10 lg:px-20 lg:py-12">
     <div className="mx-auto max-w-5xl">
       <Link href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-[#6f9879] hover:text-[#294438]"><ArrowLeft className="size-4" /> Back to overview</Link>
