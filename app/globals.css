@@ -483,6 +483,21 @@
 .auth-card h1 { color: var(--ledger-text); font-family: Inter, Geist, ui-sans-serif, system-ui, sans-serif; }
 .auth-switch a { color: var(--primary); }
 ::selection { background: #DBEAFE; color: #0F172A; }
+.month-picker { display: inline-flex; align-items: center; gap: 3px; padding: 2px 4px; border: 1px solid var(--ledger-border); border-radius: 10px; background: var(--ledger-surface); }
+.month-picker input { width: 142px; border: 0; color: var(--ledger-text); background: transparent; font: inherit; font-size: 12px; }
+.month-picker input:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 4px; }
+.month-chevron { width: 16px; height: 16px; }
+.month-chevron.previous { transform: rotate(90deg); }
+.month-chevron.next { transform: rotate(-90deg); }
+.quick-add-panel { display: flex; flex-direction: column; gap: 12px; }
+.quick-add-panel .panel-heading { margin-bottom: 0; }
+.quick-entry-input { width: 100%; min-height: 44px; padding: 0 14px; border: 1px solid var(--ledger-border); border-radius: 9px; color: var(--ledger-text); background: var(--ledger-bg); font: inherit; font-size: 13px; }
+.quick-entry-input:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+.quick-confirm-card { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); align-items: end; gap: 12px; padding: 14px; border: 1px solid var(--ledger-border); border-radius: 10px; background: var(--ledger-bg); }
+.quick-confirm-card .button-row { grid-column: 1 / -1; flex-wrap: wrap; }
+.quick-confirm-card .button-row small { color: var(--ledger-muted); font-size: 11px; }
+.negative-balance { color: var(--money-negative) !important; }
+@media (max-width: 760px) { .quick-confirm-card { grid-template-columns: repeat(2, minmax(0,1fr)); } .month-picker input { width: 118px; } }
 
 /* Keep the desktop navigation anchored while the content pane scrolls independently. */
 .ledger-app { height: 100vh; min-height: 0; overflow: hidden; }
